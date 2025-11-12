@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GEEBAR之轉生</title>
+    <!-- 预加载关键资源 -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/img/bg.png" as="image" type="image/png">
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/sound/chain-rankup.MP3" as="audio" type="audio/mpeg">
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-card-svg.svg" as="image" type="image/svg+xml">
     <style>
         * {
             margin: 0;
@@ -1442,7 +1446,6 @@
                 'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain04.svg',
                 'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain05.svg',
                 'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain06.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chainball.svg',
                 'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-close.svg',
                 'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-coop.svg',
                 'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-card-svg.svg',
@@ -1599,7 +1602,7 @@
                 }
                 
                 // 总时间超过10秒，强制完成
-                if (Date.now() - preloadStartTime > 10000) {
+                if (Date.now() - preloadStartTime > 1000000) {
                     console.warn('预加载总时间超过限制，强制完成');
                     loadedCount = totalCount;
                     updateProgress();
