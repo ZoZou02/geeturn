@@ -187,6 +187,77 @@
             }
         }
 
+        /* 预加载遮罩层样式 */
+        .preload-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease-out;
+        }
+
+        .preload-logo {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .preload-logo svg {
+            width: 100%;
+            height: 100%;
+            animation: rotate 2s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .preload-text {
+            color: #fd2d5c;
+            font-size: 1.5rem;
+            font-family: 'SimHei', '黑体', sans-serif;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(253, 45, 92, 0.7);
+        }
+
+        .preload-progress-container {
+            width: 300px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preload-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #fd2d5c, #ff6b81);
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(253, 45, 92, 0.8);
+        }
+
+        .preload-percentage {
+            color: #fff;
+            font-size: 1rem;
+            font-family: 'SimHei', '黑体', sans-serif;
+            margin-top: 10px;
+        }
+
         /* 主内容容器，初始隐藏 */
         .content-container {
             display: none;
@@ -1189,11 +1260,26 @@
 </head>
 
 <body>
-    <!-- 背景层 -->
-    <div class="bg-layer"></div>
+        <!-- 背景层 -->
+        <div class="bg-layer"></div>
 
-    <!-- 加载遮罩层 -->
-    <div class="loading-overlay" id="loadingOverlay">
+        <!-- 预加载遮罩层 -->
+        <div class="preload-overlay" id="preloadOverlay">
+            <div class="preload-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#444" stroke-width="5"/>
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#fd2d5c" stroke-width="5" stroke-dasharray="283" stroke-dashoffset="212" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="preload-text">正在加载资源...</div>
+            <div class="preload-progress-container">
+                <div class="preload-progress-bar" id="preloadProgressBar"></div>
+            </div>
+            <div class="preload-percentage" id="preloadPercentage">0%</div>
+        </div>
+
+        <!-- 加载遮罩层 -->
+        <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-text loading-text-part1">
             吾即汝……<span class="highlight-red">汝</span>即吾……<br>
             汝於此，化<span class="highlight-red">寄</span>為意義之絆使其轉生
@@ -1328,8 +1414,188 @@
     </div>
 
     <script>
-        // 点击加载功能
+        // 预加载资源函数
+        function preloadAllResources() {
+            const resources = [
+                // 背景图片
+                'img/bg.png',
+                // 音频文件
+                'sound/chain-rankup.MP3',
+                // SVG文件
+                'svg/s-arcana-nostar.svg',
+                'svg/s-arcana.svg',
+                'svg/s-blackframe-b.svg',
+                'svg/s-blackframe-t.svg',
+                'svg/s-card-b.svg',
+                'svg/s-card.svg',
+                'svg/s-chain-b-01-bottom.svg',
+                'svg/s-chain-b-01-left.svg',
+                'svg/s-chain-b-01-mid.svg',
+                'svg/s-chain-b-01-top.svg',
+                'svg/s-chain-b-02.svg',
+                'svg/s-chain-b-03.svg',
+                'svg/s-chain-b-04.svg',
+                'svg/s-chain-b-05.svg',
+                'svg/s-chain-b-06.svg',
+                'svg/s-chain01.svg',
+                'svg/s-chain02.svg',
+                'svg/s-chain03.svg',
+                'svg/s-chain04.svg',
+                'svg/s-chain05.svg',
+                'svg/s-chain06.svg',
+                'svg/s-chainball.svg',
+                'svg/s-close.svg',
+                'svg/s-coop.svg',
+                'svg/s-img-card.svg',
+                'svg/s-red.svg',
+                'svg/s-red01.svg',
+                'svg/s-red02.svg',
+                'svg/s-return.svg',
+                'svg/s-star.svg'
+            ];
+
+            const preloadOverlay = document.getElementById('preloadOverlay');
+            const progressBar = document.getElementById('preloadProgressBar');
+            const percentageText = document.getElementById('preloadPercentage');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+
+            let loadedCount = 0;
+            const totalCount = resources.length;
+            const preloadStartTime = Date.now();
+            let lastProgressTime = Date.now();
+
+            // 初始隐藏原始加载层
+            loadingOverlay.style.display = 'none';
+
+            // 预加载单个资源，带超时处理
+            function loadResource(url) {
+                return new Promise((resolve) => {
+                    // 设置超时，确保资源加载不会无限期等待
+                    const timeout = setTimeout(() => {
+                        console.warn(`资源加载超时: ${url}`);
+                        resolve(); // 超时也视为完成
+                    }, 10000); // 10秒超时
+
+                    let loader;
+
+                    // 根据文件类型创建不同的加载器
+                    if (url.endsWith('.MP3') || url.endsWith('.mp3') || url.endsWith('.wav') || url.endsWith('.ogg')) {
+                        loader = new Audio();
+                        // 音频加载需要特殊处理
+                        if ('canPlayType' in loader) {
+                            // 尝试加载
+                            loader.oncanplaythrough = () => {
+                                clearTimeout(timeout);
+                                console.log(`音频资源加载完成: ${url}`);
+                                resolve();
+                            };
+                            
+                            loader.onerror = () => {
+                                clearTimeout(timeout);
+                                console.warn(`音频资源加载失败: ${url}`);
+                                resolve(); // 即使失败也继续
+                            };
+                            
+                            loader.src = url;
+                        } else {
+                            clearTimeout(timeout);
+                            resolve(); // 不支持音频元素时跳过
+                        }
+                    } else {
+                        loader = new Image();
+                        
+                        loader.onload = () => {
+                            clearTimeout(timeout);
+                            console.log(`图片资源加载完成: ${url}`);
+                            resolve();
+                        };
+
+                        loader.onerror = () => {
+                            clearTimeout(timeout);
+                            console.warn(`图片资源加载失败: ${url}`);
+                            resolve(); // 即使失败也继续加载其他资源
+                        };
+
+                        loader.src = url;
+                    }
+                });
+            }
+
+            // 更新进度
+            function updateProgress() {
+                loadedCount++;
+                lastProgressTime = Date.now(); // 更新最后进度时间
+                const progress = Math.floor((loadedCount / totalCount) * 100);
+                progressBar.style.width = `${progress}%`;
+                percentageText.textContent = `${progress}%`;
+                console.log(`资源加载进度: ${loadedCount}/${totalCount} (${progress}%)`);
+
+                // 所有资源加载完成
+                if (loadedCount >= totalCount) {
+                    console.log('所有资源预加载完成！');
+                    // 添加一小段延迟让用户看到100%的状态
+                    setTimeout(() => {
+                        console.log('显示原始加载层...');
+                        preloadOverlay.style.animation = 'fadeOut 1s ease-in-out forwards';
+                        preloadOverlay.addEventListener('animationend', function handlePreloadEnd() {
+                            preloadOverlay.style.display = 'none';
+                            loadingOverlay.style.display = 'flex'; // 显示原始加载层
+                            preloadOverlay.removeEventListener('animationend', handlePreloadEnd);
+                            console.log('加载流程完成');
+                        }, { once: true });
+                    }, 500);
+                }
+            }
+
+            // 开始预加载所有资源
+            console.log(`开始预加载 ${totalCount} 个资源`);
+            
+            // 分批加载，避免一次性请求过多
+            const batchSize = 5;
+            const loadNextBatch = (startIndex) => {
+                const batch = resources.slice(startIndex, startIndex + batchSize);
+                console.log(`加载批次 ${Math.floor(startIndex / batchSize) + 1}: ${batch.length} 个资源`);
+                
+                if (batch.length === 0) return;
+                
+                Promise.all(batch.map(url => loadResource(url)))
+                    .then(() => {
+                        console.log(`批次 ${Math.floor(startIndex / batchSize) + 1} 完成`);
+                        // 继续加载下一批
+                        loadNextBatch(startIndex + batchSize);
+                    });
+            };
+            
+            // 立即开始加载第一批
+            loadNextBatch(0);
+            
+            // 添加更积极的安全机制，确保即使某些资源加载失败，页面也能继续
+            const safetyCheckInterval = setInterval(() => {
+                console.log(`当前加载进度: ${loadedCount}/${totalCount} (${Math.floor((loadedCount / totalCount) * 100)}%)`);
+                
+                // 如果5秒内没有任何进度，强制完成
+                if (loadedCount > 0 && loadedCount < totalCount && Date.now() - lastProgressTime > 5000) {
+                    console.warn('加载进度停滞，强制完成预加载');
+                    loadedCount = totalCount;
+                    updateProgress();
+                    clearInterval(safetyCheckInterval);
+                }
+                
+                // 总时间超过10秒，强制完成
+                if (Date.now() - preloadStartTime > 10000) {
+                    console.warn('预加载总时间超过限制，强制完成');
+                    loadedCount = totalCount;
+                    updateProgress();
+                    clearInterval(safetyCheckInterval);
+                }
+            }, 1000); // 每秒检查一次
+        }
+
+        // 页面加载完成后立即开始预加载
         document.addEventListener('DOMContentLoaded', function () {
+            // 首先调用预加载函数
+            preloadAllResources();
+
             const loadingOverlay = document.getElementById('loadingOverlay');
             const contentContainer = document.getElementById('contentContainer');
             const returnBounce = document.querySelector('.return-bounce');
@@ -1432,9 +1698,9 @@
                 }
 
                 // 设置音频播放
-                setupSoundPlayback();
-            }
-        });
+            setupSoundPlayback();
+        }
+    });
     </script>
 </body>
 
