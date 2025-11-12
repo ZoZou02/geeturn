@@ -1523,9 +1523,13 @@
 
             // 更新进度
             function updateProgress() {
-                loadedCount++;
+                // 确保loadedCount不会超过totalCount
+                if (loadedCount < totalCount) {
+                    loadedCount++;
+                }
+                
                 lastProgressTime = Date.now(); // 更新最后进度时间
-                const progress = Math.floor((loadedCount / totalCount) * 100);
+                const progress = Math.min(Math.floor((loadedCount / totalCount) * 100), 100);
                 progressBar.style.width = `${progress}%`;
                 percentageText.textContent = `${progress}%`;
                 console.log(`资源加载进度: ${loadedCount}/${totalCount} (${progress}%)`);
@@ -1542,6 +1546,11 @@
                             loadingOverlay.style.display = 'flex'; // 显示原始加载层
                             preloadOverlay.removeEventListener('animationend', handlePreloadEnd);
                             console.log('加载流程完成');
+                            
+                            // 清除安全检查定时器
+                            if (safetyCheckInterval) {
+                                clearInterval(safetyCheckInterval);
+                            }
                         }, { once: true });
                     }, 500);
                 }
@@ -1550,28 +1559,37 @@
             // 开始预加载所有资源
             console.log(`开始预加载 ${totalCount} 个资源`);
             
-            // 分批加载，避免一次性请求过多
-            const batchSize = 5;
-            const loadNextBatch = (startIndex) => {
-                const batch = resources.slice(startIndex, startIndex + batchSize);
-                console.log(`加载批次 ${Math.floor(startIndex / batchSize) + 1}: ${batch.length} 个资源`);
-                
-                if (batch.length === 0) return;
-                
-                Promise.all(batch.map(url => loadResource(url)))
-                    .then(() => {
-                        console.log(`批次 ${Math.floor(startIndex / batchSize) + 1} 完成`);
-                        // 继续加载下一批
-                        loadNextBatch(startIndex + batchSize);
-                    });
-            };
+            // 预加载所有资源并更新进度
+            // 直接加载所有资源，确保每个资源加载后都更新进度
+            const promises = resources.map(url => {
+                return loadResource(url).then(() => {
+                    // 每个资源加载完成后立即更新进度
+                    updateProgress();
+                });
+            });
             
-            // 立即开始加载第一批
-            loadNextBatch(0);
+            // 监听所有资源加载状态，确保即使有失败也能完成
+            Promise.allSettled(promises).then(() => {
+                console.log('所有资源加载请求已完成');
+                
+                // 确保最后进度正确
+                if (loadedCount < totalCount) {
+                    console.warn('部分资源可能加载失败，但强制完成预加载');
+                    loadedCount = totalCount;
+                    updateProgress();
+                }
+            });
             
             // 添加更积极的安全机制，确保即使某些资源加载失败，页面也能继续
-            const safetyCheckInterval = setInterval(() => {
-                console.log(`当前加载进度: ${loadedCount}/${totalCount} (${Math.floor((loadedCount / totalCount) * 100)}%)`);
+            let safetyCheckInterval = setInterval(() => {
+                const currentProgress = Math.floor((loadedCount / totalCount) * 100);
+                console.log(`当前加载进度: ${loadedCount}/${totalCount} (${currentProgress}%)`);
+                
+                // 如果已达到100%，清除定时器
+                if (currentProgress >= 100) {
+                    clearInterval(safetyCheckInterval);
+                    return;
+                }
                 
                 // 如果5秒内没有任何进度，强制完成
                 if (loadedCount > 0 && loadedCount < totalCount && Date.now() - lastProgressTime > 5000) {
