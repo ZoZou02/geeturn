@@ -1608,7 +1608,7 @@
                 }
                 
                 // 如果5秒内没有任何进度，强制完成
-                if (loadedCount > 0 && loadedCount < totalCount && Date.now() - lastProgressTime > 5000) {
+                if (loadedCount > 0 && loadedCount < totalCount && Date.now() - lastProgressTime > 500000) {
                     console.warn('加载进度停滞，强制完成预加载');
                     loadedCount = totalCount;
                     updateProgress();
