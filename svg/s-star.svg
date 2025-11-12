@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_图层_2" data-name="图层 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33.32 33.91">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff32d;
+        stroke-width: 0px;
+      }
+    </style>
+  </defs>
+  <g id="_borad_arcana" data-name="【borad】arcana">
+    <g id="ARCNA_10_star" data-name="ARCNA 10 star">
+      <g id="_星星" data-name="星星">
+        <polygon id="star" class="cls-1" points="31.19 29.47 19.72 26.28 10.59 33.91 10.08 22.02 0 15.7 11.15 11.54 14.05 0 21.45 9.32 33.32 8.51 26.74 18.43 31.19 29.47"/>
+      </g>
+    </g>
+  </g>
+</svg>
