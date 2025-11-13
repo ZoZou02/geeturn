@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_图层_2" data-name="图层 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 842.59 390.04">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-3 {
+        fill: #423f42;
+      }
+
+      .cls-3, .cls-4 {
+        stroke-width: 0px;
+      }
+
+      .cls-5 {
+        fill: #fff32d;
+        font-size: 102px;
+        letter-spacing: -.01em;
+      }
+
+      .cls-5, .cls-6, .cls-2 {
+        font-family: NotoSansSC-Bold, 'Noto Sans SC';
+        font-variation-settings: 'wght' 700;
+        font-weight: 700;
+      }
+
+      .cls-6, .cls-2 {
+        fill: #fff;
+        font-size: 41.53px;
+      }
+
+      .cls-7 {
+        letter-spacing: -.03em;
+      }
+    </style>
+  </defs>
+  <g id="_borad_arcana" data-name="【borad】arcana">
+    <polygon id="grey" class="cls-3" points="819.05 285 820.05 234 827.05 218 842.59 80.37 832.05 18 773.05 0 717.99 21.42 722.05 10 617.05 27 597.05 61 560.71 76.2 560.71 116.69 514.25 132.23 514.25 69.62 0 258.72 69.16 381.17 142.99 365.85 143.05 390 329.05 365 819.05 285"/>
+    <polygon id="black10max" class="cls-4" points="519.05 318 796.05 270 789.05 72 574.5 127.3 465.05 160 462.16 130.16 29.14 265.5 61.05 360 172.87 340.57 179.64 374.79 519.05 318"/>
+    <g id="ARCNA_10_star" data-name="ARCNA 10 star">
+      <text class="cls-6" transform="translate(480.91 259.26) rotate(-16.45) scale(.89 .94) skewX(-20.3)"><tspan class="cls-7" x="0" y="0">R</tspan><tspan class="cls-1" x="27.2" y="0">ANK</tspan></text>
+      <text class="cls-5" transform="translate(296.06 283.06) rotate(-16.38) scale(.64 .97) skewX(-20.15)"><tspan x="0" y="0">懷念</tspan></text>
+      <text class="cls-2" transform="translate(121.93 280.03) rotate(-16.61) scale(.89 .94) skewX(-20.3)"><tspan x="0" y="0">ARCANA</tspan></text>
+    </g>
+  </g>
+</svg>

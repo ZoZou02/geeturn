@@ -5,10 +5,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GEEBAR之轉生</title>
+    <!-- Favicon 支持 -->
+    <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-96x96.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <script>
+        // 设备检测：判断是否为移动设备
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // 立即执行设备检测，在页面加载前
+        if (isMobileDevice()) {
+            // 阻止页面继续加载
+            document.write('<style>*{margin:0;padding:0;} body{background:radial-gradient(circle, #fd2d5c 0%, #fd2d5c 10%, #000 10%, #000 20%, #fd2d5c 20%, #fd2d5c 30%, #000 30%, #000 40%, #fd2d5c 40%, #fd2d5c 50%, #000 50%, #000 60%, #fd2d5c 60%, #fd2d5c 70%, #000 70%, #000 80%, #fd2d5c 80%, #fd2d5c 90%, #000 90%, #000 100%); background-size: 100% 100%; color:#fff;font-family:Arial,sans-serif;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;}</style>');
+            document.write('<div style="background:#000; border:4px solid #fff; padding:20px;">');
+            document.write('<h1>请使用<span style="color:#fd2d5c;">PC</span>端访问</h1>');
+            document.write('</div>');
+            // 阻止后续脚本执行
+            window.stop();
+        }
+
+        // 进入全屏模式的函数
+        function enterFullscreen() {
+            const docEl = document.documentElement;
+
+            if (docEl.requestFullscreen) {
+                docEl.requestFullscreen();
+            } else if (docEl.mozRequestFullScreen) { // Firefox
+                docEl.mozRequestFullScreen();
+            } else if (docEl.webkitRequestFullscreen) { // Chrome, Safari
+                docEl.webkitRequestFullscreen();
+            } else if (docEl.msRequestFullscreen) { // IE/Edge
+                docEl.msRequestFullscreen();
+            }
+        }
+
+        // 监听用户交互后立即进入全屏
+        document.addEventListener('DOMContentLoaded', function () {
+            // 尝试自动进入全屏
+            enterFullscreen();
+
+            // 添加点击事件作为备用，确保用户交互后能进入全屏
+            document.addEventListener('click', function enterFullscreenOnClick() {
+                enterFullscreen();
+                // 移除事件监听器，避免重复触发
+                document.removeEventListener('click', enterFullscreenOnClick);
+            });
+        });
+    </script>
     <!-- 预加载关键资源 -->
-    <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/img/bg.png" as="image" type="image/png">
+    <!-- <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/img/bg.png" as="image" type="image/png">
     <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/sound/chain-rankup.MP3" as="audio" type="audio/mpeg">
-    <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-card-svg.svg" as="image" type="image/svg+xml">
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-svg-card.svg" as="image" type="image/svg+xml">
     <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain01.svg" as="image" type="image/svg+xml">
     <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain02.svg" as="image" type="image/svg+xml">
     <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain03.svg" as="image" type="image/svg+xml">
@@ -21,13 +72,39 @@
     <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-close.svg" as="image" type="image/svg+xml">
     <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-coop.svg" as="image" type="image/svg+xml">
     <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-red.svg" as="image" type="image/svg+xml">
-    <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-red02.svg" as="image" type="image/svg+xml">
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-red02.svg" as="image" type="image/svg+xml"> -->
 
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            cursor: url('svg/s-cursor.svg') 10 10, auto !important;
+        }
+
+        a,
+        button {
+            cursor: url('svg/s-cursor.svg') 10 10, pointer !important;
+        }
+
+        /* 文本选择状态 */
+        input,
+        textarea,
+        [contenteditable="true"] {
+            cursor: url('svg/s-cursor.svg') 10 10, text !important;
+        }
+
+        /* 覆盖其他可能的光标状态 */
+        :active,
+        :hover,
+        :focus,
+        :focus-within,
+        ::before,
+        ::after,
+        *:hover,
+        *:focus,
+        *:active {
+            cursor: url('svg/s-cursor.svg') 10 10, auto !important;
         }
 
         html,
@@ -71,7 +148,7 @@
             left: -1%;
             width: 102%;
             height: 102%;
-            background-image: url('https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/img/bg.png');
+            background-image: url('img/bg.png');
             background-size: cover;
             background-position: center center;
             background-repeat: no-repeat;
@@ -228,18 +305,24 @@
             position: relative;
         }
 
-        .preload-logo svg {
+        .preload-logo img {
             width: 100%;
             height: 100%;
-            animation: rotate 2s linear infinite;
+            animation: rotateY 2s linear infinite;
+            transform-style: preserve-3d;
         }
 
-        @keyframes rotate {
+        .preload-logo {
+            perspective: 1000px;
+        }
+
+        @keyframes rotateY {
             from {
-                transform: rotate(0deg);
+                transform: rotateY(0deg);
             }
+
             to {
-                transform: rotate(360deg);
+                transform: rotateY(360deg);
             }
         }
 
@@ -255,15 +338,15 @@
         .preload-progress-container {
             width: 300px;
             height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+            background: white;
+            border: 1px solid black;
             overflow: hidden;
             position: relative;
         }
 
         .preload-progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #fd2d5c, #ff6b81);
+            background: #fd2d5c;
             width: 0%;
             transition: width 0.3s ease;
             box-shadow: 0 0 10px rgba(253, 45, 92, 0.8);
@@ -318,10 +401,10 @@
         .card {
             position: fixed;
             top: 60%;
-            left: 25%;
+            left: 27%;
             transform: translate(-50%, -50%);
             transform-origin: center center;
-            width: 34vw;
+            width: 30vw;
             height: auto;
             z-index: 10;
             animation: flipIn 0.5s linear forwards, cardShake 0.2s ease-in forwards 1.2s;
@@ -852,11 +935,11 @@
         /* 卡片右边 - s-arcana.svg样式 - 从卡片中向右出现 */
         .card-right-arcana {
             position: fixed;
-            top: 54%;
-            left: 57%;
+            top: 53%;
+            left: 55%;
             transform: translate(-50%, -50%);
             transform-origin: center center;
-            width: 52vw;
+            width: 48vw;
             height: auto;
             z-index: 15;
             opacity: 0;
@@ -864,6 +947,82 @@
         }
 
         .card-right-arcana img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes tenPulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            10% {
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+
+            30% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .card-right-arcana-10 {
+            position: fixed;
+            top: 47%;
+            left: 71%;
+            transform: translate(-50%, -50%);
+            transform-origin: center center;
+            width: 16vw;
+            height: auto;
+            z-index: 16;
+            opacity: 0;
+            animation: appearFromCardRight 0.2s ease-out forwards 1.4s,
+                tenPulse 2s ease-in-out infinite 4.6s;
+        }
+
+        .card-right-arcana-10 img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes maxPulse {
+            0% {
+                transform: translate(-50%, -50%);
+            }
+
+            10% {
+                transform: translate(-45%, -50%);
+            }
+
+            30% {
+                transform: translate(-50%, -50%);
+            }
+
+            100% {
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .card-right-arcana-max {
+            position: fixed;
+            top: 47%;
+            left: 80%;
+            transform: translate(-50%, -50%);
+            transform-origin: center center;
+            width: 10vw;
+            height: auto;
+            z-index: 16;
+            opacity: 0;
+            animation: appearFromCardRight 0.2s ease-out forwards 1.4s,
+                maxPulse 2s ease-in-out infinite 4.6s;
+        }
+
+        .card-right-arcana-max img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -925,14 +1084,38 @@
                 transform: translate(-50%, -50%) scale(1);
             }
 
-            50% {
+            10% {
                 transform: translate(-50%, -50%) scale(1.5);
+            }
+
+            30% {
+                transform: translate(-50%, -50%) scale(1);
             }
 
             100% {
                 transform: translate(-50%, -50%) scale(1);
             }
         }
+
+        @keyframes testPulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            5% {
+                transform: translate(-50%, -50%) scale(1.5);
+            }
+
+            10% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+
 
         /* 星星容器 */
         .stars-container {
@@ -973,7 +1156,7 @@
             left: 0;
             animation:
                 starAppear 0.1s ease-out forwards 1.4s,
-                starPulse 0.8s ease-in-out forwards 2.6s;
+                starPulse 2s ease-in-out infinite 2.6s;
         }
 
         .star-2 {
@@ -981,7 +1164,7 @@
             left: 4%;
             animation:
                 starAppear 0.1s ease-out forwards 1.4s,
-                starPulse 0.8s ease-in-out forwards 2.8s;
+                starPulse 2s ease-in-out infinite 2.8s;
         }
 
         .star-3 {
@@ -989,7 +1172,7 @@
             left: 8%;
             animation:
                 starAppear 0.1s ease-out forwards 1.4s,
-                starPulse 0.8s ease-in-out forwards 3.0s;
+                starPulse 2s ease-in-out infinite 3.0s;
         }
 
         .star-4 {
@@ -997,7 +1180,7 @@
             left: 12%;
             animation:
                 starAppear 0.1s ease-out forwards 1.4s,
-                starPulse 0.8s ease-in-out forwards 3.2s;
+                starPulse 2s ease-in-out infinite 3.2s;
         }
 
         .star-5 {
@@ -1005,7 +1188,7 @@
             left: 16%;
             animation:
                 starAppear 0.1s ease-out forwards 1.4s,
-                starPulse 0.8s ease-in-out forwards 3.4s;
+                starPulse 2s ease-in-out infinite 3.4s;
         }
 
         .star-6 {
@@ -1013,7 +1196,7 @@
             left: 20%;
             animation:
                 starAppear 0.1s ease-out forwards 1.4s,
-                starPulse 0.8s ease-in-out forwards 3.6s;
+                starPulse 2s ease-in-out infinite 3.6s;
         }
 
         .star-7 {
@@ -1021,7 +1204,7 @@
             left: 24%;
             animation:
                 starAppear 0.1s ease-out forwards 1.4s,
-                starPulse 0.8s ease-in-out forwards 3.8s;
+                starPulse 2s ease-in-out infinite 3.8s;
         }
 
         .star-8 {
@@ -1029,7 +1212,7 @@
             left: 28%;
             animation:
                 starAppear 0.1s ease-out forwards 1.4s,
-                starPulse 0.8s ease-in-out forwards 4.0s;
+                starPulse 2s ease-in-out infinite 4.0s;
         }
 
         .star-9 {
@@ -1037,7 +1220,7 @@
             left: 32%;
             animation:
                 starAppear 0.1s ease-out forwards 1.4s,
-                starPulse 0.8s ease-in-out forwards 4.2s;
+                starPulse 2s ease-in-out infinite 4.2s;
         }
 
         .star-10 {
@@ -1045,17 +1228,17 @@
             left: 36%;
             animation:
                 starAppear 0.1s ease-out forwards 1.4s,
-                starPulse 0.8s ease-in-out forwards 4.4s;
+                starPulse 2s ease-in-out infinite 4.4s;
         }
 
         /* 弹入弹出效果 */
         .return-bounce {
             position: fixed;
-            top: 50%;
-            left: 70%;
+            top: 47%;
+            left: 72%;
             transform: translate(-50%, -50%);
             transform-origin: center center;
-            width: 25vw;
+            width: 27vw;
             height: auto;
             z-index: 25;
             opacity: 0;
@@ -1072,7 +1255,7 @@
         .close-button {
             position: fixed;
             bottom: 1vw;
-            right: 8vw;
+            right: 3vw;
             width: 9vw;
             height: auto;
             z-index: 30;
@@ -1278,26 +1461,23 @@
 </head>
 
 <body>
-        <!-- 背景层 -->
-        <div class="bg-layer"></div>
+    <!-- 背景层 -->
+    <div class="bg-layer"></div>
 
-        <!-- 预加载遮罩层 -->
-        <div class="preload-overlay" id="preloadOverlay">
-            <div class="preload-logo">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="#444" stroke-width="5"/>
-                    <circle cx="50" cy="50" r="45" fill="none" stroke="#fd2d5c" stroke-width="5" stroke-dasharray="283" stroke-dashoffset="212" stroke-linecap="round"/>
-                </svg>
-            </div>
-            <div class="preload-text">正在加载资源...</div>
-            <div class="preload-progress-container">
-                <div class="preload-progress-bar" id="preloadProgressBar"></div>
-            </div>
-            <div class="preload-percentage" id="preloadPercentage">0%</div>
+    <!-- 预加载遮罩层 -->
+    <div class="preload-overlay" id="preloadOverlay">
+        <div class="preload-logo">
+            <img src="svg/s-mask-load.svg" alt="Loading" />
         </div>
+        <div class="preload-text">LOADING</div>
+        <div class="preload-progress-container">
+            <div class="preload-progress-bar" id="preloadProgressBar"></div>
+        </div>
+        <div class="preload-percentage" id="preloadPercentage">0%</div>
+    </div>
 
-        <!-- 加载遮罩层 -->
-        <div class="loading-overlay" id="loadingOverlay">
+    <!-- 加载遮罩层 -->
+    <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-text loading-text-part1">
             吾即汝……<span class="highlight-red">汝</span>即吾……<br>
             汝於此，化<span class="highlight-red">寄</span>為意義之絆使其轉生
@@ -1310,91 +1490,98 @@
             今於此，汝覺醒「<span class="highlight-red">懷</span>念」之極罷奧祕<br>
             賜予<span class="highlight-red">汝</span>艾斯比之力……
         </div>
-        <div class="loading-instruction">點擊繼續</div>
+        <div class="loading-instruction">CLICK TO CONTINUE</div>
     </div>
 
     <!-- 主内容容器 -->
     <div class="content-container" id="contentContainer">
         <!-- 音频元素 - 页面加载后自动播放音效 -->
         <audio id="chainSound">
-            <source src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/sound/chain-rankup.MP3" type="audio/mpeg">
+            <source src="sound/chain-rankup.MP3" type="audio/mpeg">
         </audio>
 
         <!-- SVG覆盖层 - 中层，分为上下两个框 -->
         <div class="background">
-            <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-blackframe-b.svg" alt="底部黑色边框" class="bottom-frame">
-            <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-blackframe-t.svg" alt="顶部黑色边框" class="top-frame">
+            <img src="svg/s-blackframe-b.svg" alt="底部黑色边框" class="bottom-frame">
+            <img src="svg/s-blackframe-t.svg" alt="顶部黑色边框" class="top-frame">
         </div>
 
         <!-- 卡片背景 - s-card-b.svg -->
         <div class="card-background">
-            <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-card-b.svg" alt="卡片背景">
+            <img src="svg/s-card-b.svg" alt="卡片背景">
         </div>
 
         <!-- 卡片右边 - s-coop.svg - 从卡片中向右出现 -->
         <div class="card-right-coop">
-            <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-coop.svg" alt="卡片右边-coop">
+            <img src="svg/s-coop.svg" alt="卡片右边-coop">
         </div>
 
         <!-- 卡片右边 - s-arcana.svg - 从卡片中向右出现 -->
         <div class="card-right-arcana">
-            <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-arcana-nostar.svg" alt="卡片右边-arcana">
+            <img src="svg/s-arcana-none.svg" alt="卡片右边-arcana">
+        </div>
+
+        <div class="card-right-arcana-10">
+            <img src="svg/s-10-grey.svg" alt="卡片右边-arcana-10">
+        </div>
+
+        <div class="card-right-arcana-max">
+            <img src="svg/s-max.svg" alt="卡片右边-arcana-max">
         </div>
 
         <!-- 10个星星元素 -->
         <div class="stars-container">
             <div class="star-item star-1">
-                <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-star.svg" alt="星星图标1">
+                <img src="svg/s-star.svg" alt="星星图标1">
             </div>
             <div class="star-item star-2">
-                <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-star.svg" alt="星星图标2">
+                <img src="svg/s-star.svg" alt="星星图标2">
             </div>
             <div class="star-item star-3">
-                <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-star.svg" alt="星星图标3">
+                <img src="svg/s-star.svg" alt="星星图标3">
             </div>
             <div class="star-item star-4">
-                <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-star.svg" alt="星星图标4">
+                <img src="svg/s-star.svg" alt="星星图标4">
             </div>
             <div class="star-item star-5">
-                <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-star.svg" alt="星星图标5">
+                <img src="svg/s-star.svg" alt="星星图标5">
             </div>
             <div class="star-item star-6">
-                <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-star.svg" alt="星星图标6">
+                <img src="svg/s-star.svg" alt="星星图标6">
             </div>
             <div class="star-item star-7">
-                <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-star.svg" alt="星星图标7">
+                <img src="svg/s-star.svg" alt="星星图标7">
             </div>
             <div class="star-item star-8">
-                <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-star.svg" alt="星星图标8">
+                <img src="svg/s-star.svg" alt="星星图标8">
             </div>
             <div class="star-item star-9">
-                <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-star.svg" alt="星星图标9">
+                <img src="svg/s-star.svg" alt="星星图标9">
             </div>
             <div class="star-item star-10">
-                <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-star.svg" alt="星星图标10">
+                <img src="svg/s-star.svg" alt="星星图标10">
             </div>
         </div>
 
         <!-- s-return.svg - 弹入弹出效果 -->
         <div class="return-bounce">
-            <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-return.svg" alt="返回图标">
+            <img src="svg/s-return.svg" alt="返回图标">
         </div>
 
         <!-- 关闭按钮 - 初始隐藏，动画结束后显示 -->
-        <a href="/geelain" class="close-button" id="closeButton"
-            style="display: none;">
-            <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-close.svg" alt="关闭按钮">
+        <a href="https://zozou.top/geelain/" class="close-button" id="closeButton" style="display: none;">
+            <img src="svg/s-close-pc.svg" alt="关闭按钮">
         </a>
 
         <!-- 卡片 -->
         <div class="card">
-            <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-img-card.svg" alt="卡片">
+            <img src="svg/s-svg-card.svg" alt="卡片">
         </div>
 
         <!-- 链条元素 - 按顺序排列 -->
         <!-- 链条01 -->
         <div class="chain01" id="chain01">
-            <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain01.svg" alt="链条01">
+            <img src="svg/s-chain01.svg" alt="链条01">
         </div>
 
         <!-- s-chain-b-01的四个部分 - 初始隐藏，在red01动画结束后显示 -->
@@ -1420,12 +1607,12 @@
 
         <!-- red01元素 - 从右上往下砸并移动到最下层 -->
         <div class="red01">
-            <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-red01.svg" alt="red01元素">
+            <img src="svg/s-red01.svg" alt="red01元素">
         </div>
 
         <!-- red02元素 - 在red01动画结束后从右下往上移动 -->
         <div class="red02">
-            <img src="https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-red02.svg" alt="red02元素">
+            <img src="svg/s-red02.svg" alt="red02元素">
         </div>
 
 
@@ -1436,38 +1623,37 @@
         function preloadAllResources() {
             const resources = [
                 // 背景图片
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/img/bg.png',
+                'img/bg.png',
                 // 音频文件
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/sound/chain-rankup.MP3',
+                'sound/chain-rankup.MP3',
                 // SVG文件
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-arcana-nostar.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-arcana.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-blackframe-b.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-blackframe-t.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-card-b.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain-b-01-bottom.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain-b-01-left.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain-b-01-mid.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain-b-01-top.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain-b-02.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain-b-03.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain-b-04.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain-b-05.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain-b-06.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain01.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain02.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain03.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain04.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain05.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-chain06.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-close.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-coop.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-card-svg.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-red.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-red01.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-red02.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-return.svg',
-                'https://cdn.jsdelivr.net/gh/ZoZou02/geeturn/svg/s-star.svg'
+                'svg/s-arcana-none.svg',
+                'svg/s-blackframe-b.svg',
+                'svg/s-blackframe-t.svg',
+                'svg/s-card-b.svg',
+                'svg/s-chain-b-01-bottom.svg',
+                'svg/s-chain-b-01-left.svg',
+                'svg/s-chain-b-01-mid.svg',
+                'svg/s-chain-b-01-top.svg',
+                'svg/s-chain-b-02.svg',
+                'svg/s-chain-b-03.svg',
+                'svg/s-chain-b-04.svg',
+                'svg/s-chain-b-05.svg',
+                'svg/s-chain-b-06.svg',
+                'svg/s-chain01.svg',
+                'svg/s-chain02.svg',
+                'svg/s-chain03.svg',
+                'svg/s-chain04.svg',
+                'svg/s-chain05.svg',
+                'svg/s-chain06.svg',
+                'svg/s-close.svg',
+                'svg/s-coop.svg',
+                'svg/s-svg-card.svg',
+                'svg/s-red.svg',
+                'svg/s-red01.svg',
+                'svg/s-red02.svg',
+                'svg/s-return.svg',
+                'svg/s-star.svg'
             ];
 
             const preloadOverlay = document.getElementById('preloadOverlay');
@@ -1505,13 +1691,13 @@
                                 console.log(`音频资源加载完成: ${url}`);
                                 resolve();
                             };
-                            
+
                             loader.onerror = () => {
                                 clearTimeout(timeout);
                                 console.warn(`音频资源加载失败: ${url}`);
                                 resolve(); // 即使失败也继续
                             };
-                            
+
                             loader.src = url;
                         } else {
                             clearTimeout(timeout);
@@ -1519,7 +1705,7 @@
                         }
                     } else {
                         loader = new Image();
-                        
+
                         loader.onload = () => {
                             clearTimeout(timeout);
                             console.log(`图片资源加载完成: ${url}`);
@@ -1543,7 +1729,7 @@
                 if (loadedCount < totalCount) {
                     loadedCount++;
                 }
-                
+
                 lastProgressTime = Date.now(); // 更新最后进度时间
                 const progress = Math.min(Math.floor((loadedCount / totalCount) * 100), 100);
                 progressBar.style.width = `${progress}%`;
@@ -1562,7 +1748,7 @@
                             loadingOverlay.style.display = 'flex'; // 显示原始加载层
                             preloadOverlay.removeEventListener('animationend', handlePreloadEnd);
                             console.log('加载流程完成');
-                            
+
                             // 清除安全检查定时器
                             if (safetyCheckInterval) {
                                 clearInterval(safetyCheckInterval);
@@ -1574,7 +1760,7 @@
 
             // 开始预加载所有资源
             console.log(`开始预加载 ${totalCount} 个资源`);
-            
+
             // 预加载所有资源并更新进度
             // 直接加载所有资源，确保每个资源加载后都更新进度
             const promises = resources.map(url => {
@@ -1583,11 +1769,11 @@
                     updateProgress();
                 });
             });
-            
+
             // 监听所有资源加载状态，确保即使有失败也能完成
             Promise.allSettled(promises).then(() => {
                 console.log('所有资源加载请求已完成');
-                
+
                 // 确保最后进度正确
                 if (loadedCount < totalCount) {
                     console.warn('部分资源可能加载失败，但强制完成预加载');
@@ -1595,18 +1781,18 @@
                     updateProgress();
                 }
             });
-            
+
             // 添加更积极的安全机制，确保即使某些资源加载失败，页面也能继续
             let safetyCheckInterval = setInterval(() => {
                 const currentProgress = Math.floor((loadedCount / totalCount) * 100);
                 console.log(`当前加载进度: ${loadedCount}/${totalCount} (${currentProgress}%)`);
-                
+
                 // 如果已达到100%，清除定时器
                 if (currentProgress >= 100) {
                     clearInterval(safetyCheckInterval);
                     return;
                 }
-                
+
                 // 如果5秒内没有任何进度，强制完成
                 if (loadedCount > 0 && loadedCount < totalCount && Date.now() - lastProgressTime > 500000) {
                     console.warn('加载进度停滞，强制完成预加载');
@@ -1614,7 +1800,7 @@
                     updateProgress();
                     clearInterval(safetyCheckInterval);
                 }
-                
+
                 // 总时间超过10秒，强制完成
                 if (Date.now() - preloadStartTime > 1000000) {
                     console.warn('预加载总时间超过限制，强制完成');
@@ -1667,9 +1853,9 @@
                                 setTimeout(function () {
                                     closeButton.classList.add('visible');
                                 }, 10);
-                            }, 500); 
+                            }, 500);
                         }
-                    }, { once: true }); 
+                    }, { once: true });
                 }
 
                 // 为所有chain元素添加动画结束事件监听
@@ -1702,10 +1888,10 @@
                             // 隐藏原始chain01 - 使用display: none确保完全隐藏
                             chain01.style.display = 'none';
                             const animations = [
-                                'chain01BottomShake', 
-                                'chain01LeftShake',   
+                                'chain01BottomShake',
+                                'chain01LeftShake',
                                 'chain01MidShake',
-                                'chain01TopShake' 
+                                'chain01TopShake'
                             ];
 
                             // 同时触发四个部分的动画，略有先后顺序
@@ -1713,7 +1899,7 @@
                                 if (part) {
                                     setTimeout(function () {
                                         part.style.animation = animations[index] + ' 0.3s ease-out forwards';
-                                    }, index * 50); 
+                                    }, index * 50);
                                 }
                             });
                         }
@@ -1723,7 +1909,7 @@
                 // 播放音效 - 修改为在用户交互后才播放
                 function setupSoundPlayback() {
                     const audio = document.getElementById('chainSound');
-                    audio.volume = 0.8; 
+                    audio.volume = 1;
 
                     // 尝试播放音频
                     audio.play().catch(e => {
@@ -1732,9 +1918,56 @@
                 }
 
                 // 设置音频播放
-            setupSoundPlayback();
-        }
-    });
+                setupSoundPlayback();
+            }
+        });
+
+        // 为关闭按钮添加点击事件处理
+        document.addEventListener('DOMContentLoaded', function () {
+            const closeButton = document.getElementById('closeButton');
+            if (closeButton) {
+                // 关闭按钮点击处理函数
+                function handleCloseClick() {
+                    // 退出全屏函数
+                    function exitFullscreen() {
+                        if (document.exitFullscreen) {
+                            return document.exitFullscreen();
+                        } else if (document.mozCancelFullScreen) {
+                            return document.mozCancelFullScreen();
+                        } else if (document.webkitExitFullscreen) {
+                            return document.webkitExitFullscreen();
+                        } else if (document.msExitFullscreen) {
+                            return document.msExitFullscreen();
+                        }
+                        return Promise.resolve(); // 如果浏览器不支持全屏API，返回一个已解析的Promise
+                    }
+
+                    // 先退出全屏，然后再执行跳转
+                    exitFullscreen().then(function () {
+                        // 退出全屏后，延迟一小段时间再跳转，确保全屏状态已完全退出
+                        setTimeout(function () {
+                            window.location.href = closeButton.getAttribute('href');
+                        }, 100);
+                    });
+                }
+
+                // 为关闭按钮添加点击事件
+                closeButton.addEventListener('click', function (e) {
+                    // 阻止默认跳转行为
+                    e.preventDefault();
+                    handleCloseClick();
+                });
+
+                // 添加键盘事件监听器，支持空格键触发关闭
+                document.addEventListener('keydown', function (e) {
+                    // 检查是否按下的是空格键且关闭按钮可见
+                    if (e.code === 'Space' && !e.shiftKey && closeButton.style.display !== 'none' && closeButton.classList.contains('visible')) {
+                        e.preventDefault(); // 阻止空格键的默认行为（如页面滚动）
+                        handleCloseClick();
+                    }
+                });
+            }
+        });
     </script>
 </body>
 
