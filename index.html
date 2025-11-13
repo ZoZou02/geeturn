@@ -16,17 +16,42 @@
         function isMobileDevice() {
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         }
-
-        // 立即执行设备检测，在页面加载前
-        if (isMobileDevice()) {
-            // 阻止页面继续加载
-            document.write('<style>*{margin:0;padding:0;} body{background:radial-gradient(circle, #fd2d5c 0%, #fd2d5c 10%, #000 10%, #000 20%, #fd2d5c 20%, #fd2d5c 30%, #000 30%, #000 40%, #fd2d5c 40%, #fd2d5c 50%, #000 50%, #000 60%, #fd2d5c 60%, #fd2d5c 70%, #000 70%, #000 80%, #fd2d5c 80%, #fd2d5c 90%, #000 90%, #000 100%); background-size: 100% 100%; color:#fff;font-family:Arial,sans-serif;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;}</style>');
-            document.write('<div style="background:#000; border:4px solid #fff; padding:20px;">');
-            document.write('<h1>请使用<span style="color:#fd2d5c;">PC</span>端访问</h1>');
-            document.write('</div>');
-            // 阻止后续脚本执行
-            window.stop();
+        
+        // 检测是否为竖屏模式
+        function isPortraitMode() {
+            // 检查屏幕宽高比
+            return window.innerHeight > window.innerWidth || 
+                   (screen.orientation && screen.orientation.type.includes('portrait')) ||
+                   (window.orientation !== undefined && (window.orientation === 0 || window.orientation === 180));
         }
+        
+        // 处理移动设备和屏幕方向
+        function handleDeviceAndOrientation() {
+            // 如果是移动设备且处于竖屏模式
+            if (isMobileDevice() && isPortraitMode()) {
+                // 阻止页面继续加载
+                document.write('<style>*{margin:0;padding:0;} body{background:radial-gradient(circle, #fd2d5c 0%, #fd2d5c 10%, #000 10%, #000 20%, #fd2d5c 20%, #fd2d5c 30%, #000 30%, #000 40%, #fd2d5c 40%, #fd2d5c 50%, #000 50%, #000 60%, #fd2d5c 60%, #fd2d5c 70%, #000 70%, #000 80%, #fd2d5c 80%, #fd2d5c 90%, #000 90%, #000 100%); background-size: 100% 100%; color:#fff;font-family:Arial,sans-serif;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;}</style>');
+                document.write('<div style="background:#000; border:4px solid #fff; padding:20px;">');
+                document.write('<h1>请<span style="color:#fd2d5c;">旋转设备</span>为横屏模式</h1>');
+                document.write('<p style="margin-top:10px;">或使用<span style="color:#fd2d5c;">PC</span>端访问获得最佳体验</p>');
+                document.write('</div>');
+                // 阻止后续脚本执行
+                window.stop();
+            }
+        }
+        
+        // 立即执行设备检测，在页面加载前
+        handleDeviceAndOrientation();
+        
+        // 添加屏幕方向变化监听
+        window.addEventListener('orientationchange', handleDeviceAndOrientation);
+        window.addEventListener('resize', handleDeviceAndOrientation);
+        
+        // 针对iOS设备的额外处理
+        window.addEventListener('load', function() {
+            // 延迟执行一次检查，确保在页面完全加载后能正确检测方向
+            setTimeout(handleDeviceAndOrientation, 500);
+        });
 
         // 进入全屏模式的函数
         function enterFullscreen() {
