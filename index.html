@@ -31,10 +31,19 @@
             if (isMobileDevice() && isPortraitMode()) {
                 // 阻止页面继续加载
                 document.write('<style>*{margin:0;padding:0;} body{background:radial-gradient(circle, #fd2d5c 0%, #fd2d5c 10%, #000 10%, #000 20%, #fd2d5c 20%, #fd2d5c 30%, #000 30%, #000 40%, #fd2d5c 40%, #fd2d5c 50%, #000 50%, #000 60%, #fd2d5c 60%, #fd2d5c 70%, #000 70%, #000 80%, #fd2d5c 80%, #fd2d5c 90%, #000 90%, #000 100%); background-size: 100% 100%; color:#fff;font-family:Arial,sans-serif;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;}</style>');
-                document.write('<div style="background:#000; border:4px solid #fff; padding:20px;">');
-                document.write('<h1>请<span style="color:#fd2d5c;">旋转设备</span>为横屏模式</h1>');
-                document.write('<p style="margin-top:10px;">或使用<span style="color:#fd2d5c;">PC</span>端访问获得最佳体验</p>');
+                document.write('<div>');
+                document.write('<h1 style="position:relative; display:inline-block;"><div style="background: #fd2d5c;color: #fff;border: 3px solid #000;box-shadow: 0px 0px 0px 3px #fff;padding: 0 8px;margin: 0 2px;position:absolute;left: -160px;top: -40px;font-size: 38px;transform: rotate(353deg);">旋</div><div style="background:#000;color:#fff;border:2px solid #fff;/* box-shadow:0px 0px 0px 3px #fff; */padding: 0 6px;margin:0 2px;position:absolute;left: -100px;top: -33px;font-size: 32px;transform: rotate(351deg);">转</div><div style="background:#000;color:#fff;border:2px solid #fff;/* box-shadow:0px 0px 0px 3px #fff; */padding: 0px 6px;margin:0 2px;position:absolute;left: -53px;top: -36px;font-size: 32px;transform: rotate(6deg);">设</div><div style="background:#000;color:#fff;border:2px solid #fff;/* box-shadow:0px 0px 0px 3px #fff; */padding: 0px 6px;margin:0 2px;position:absolute;left: -7px;top: -34px;font-size: 32px;transform: rotate(7deg);">备</div><div style="background:#000;color:#fff;border:2px solid #fff;/* box-shadow:0px 0px 0px 3px #fff; */padding: 0px 6px;margin:0 2px;position:absolute;left: 37px;top: -29px;font-size: 28px;">至</div><div style="background:#000;color:#fd2d5c;border:2px solid #fff;/* box-shadow:0px 0px 0px 3px #fff; */padding: 0 5px;margin:0 2px;position:absolute;left: 80px;top: -24px;font-size: 24px;transform: rotate(7deg);">横</div><div style="background:#000;color:#fff;border:2px solid #fff;/* box-shadow:0px 0px 0px 3px #fff; */padding: 0 8px;margin:0 2px;position:absolute;left: 115px;top: -34px;font-size: 34px;">屏</div></h1>');
                 document.write('</div>');
+                
+                // 添加触摸刷新
+                document.addEventListener('touchstart', function() {
+                    location.reload();
+                });
+                // 保留click事件
+                document.addEventListener('click', function() {
+                    location.reload();
+                });
+                
                 // 阻止后续脚本执行
                 window.stop();
             }
@@ -202,7 +211,7 @@
 
         .loading-text {
             color: #fff;
-            font-size: 1.7rem;
+            font-size: clamp(12px, 1.5vw, 24px);
             font-family: '黑体', 'SimHei', "Microsoft YaHei UI Light", "微软雅黑 Light", sans-serif;
             font-stretch: condensed;
             letter-spacing: 2px;
@@ -225,7 +234,7 @@
         /* 三个独立段落的样式，可以单独调整位置 */
         .loading-text-part1 {
             opacity: 0;
-            top: 20%;
+            top: 25%;
             animation: fadeIn 1.5s ease-in-out forwards, pulse 1.5s ease-in-out infinite 1.5s;
         }
 
@@ -237,7 +246,7 @@
 
         .loading-text-part3 {
             opacity: 0;
-            top: 70%;
+            top: 65%;
             animation: fadeIn 1.5s ease-in-out forwards 3s, pulse 1.5s ease-in-out infinite 4.5s;
         }
 
@@ -1515,7 +1524,6 @@
             今於此，汝覺醒「<span class="highlight-red">懷</span>念」之極罷奧祕<br>
             賜予<span class="highlight-red">汝</span>艾斯比之力……
         </div>
-        <div class="loading-instruction">CLICK TO CONTINUE</div>
     </div>
 
     <!-- 主内容容器 -->
