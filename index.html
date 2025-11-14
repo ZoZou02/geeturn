@@ -1708,8 +1708,8 @@
                     // 设置超时，确保资源加载不会无限期等待
                     const timeout = setTimeout(() => {
                         console.warn(`资源加载超时: ${url}`);
-                        resolve(); // 超时也视为完成
-                    }, 10000); // 10秒超时
+                        resolve(); 
+                    }, 100000); // 10秒超时
 
                     let loader;
 
